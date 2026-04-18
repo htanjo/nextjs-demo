@@ -37,8 +37,8 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.ctas}>
-          <Button variant="contained" href="/files">
-            Files
+          <Button variant="contained" href="/notes">
+            Notes
           </Button>
         </div>
       </main>

@@ -1,10 +1,10 @@
 import { Container } from "@mui/material";
 
-export default function Files() {
+export default function Notes() {
   return (
     <Container>
-      <h1>Files</h1>
-      <p>This is the files page.</p>
+      <h1>Notes</h1>
+      <p>This is the notes page.</p>
     </Container>
   );
 }
