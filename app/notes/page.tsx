@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Link,
   Stack,
   Table,
   TableBody,
@@ -12,8 +11,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { connection } from "next/server";
-import { deleteNote } from "@/app/notes/actions";
+import { NoteTableRow } from "@/app/notes/components/note-table-row";
 import { NotesShell } from "@/app/notes/components/notes-shell";
 import { NotesSurface } from "@/app/notes/components/notes-surface";
 import { listNotes } from "@/lib/notes";
@@ -43,29 +43,22 @@ export default async function Notes() {
               alignItems: { xs: "stretch", sm: "center" },
             }}
           >
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={2}
-              sx={{
-                justifyContent: "space-between",
-                alignItems: { xs: "stretch", sm: "center" },
-              }}
+            <TextField
+              label="Search notes"
+              placeholder="Search UI can be added in a later step"
+              size="small"
+              fullWidth
+              disabled
+              sx={{ flex: 1 }}
+            />
+            <Button
+              variant="contained"
+              href="/notes/new"
+              startIcon={<AddRoundedIcon />}
+              sx={{ minWidth: 160, alignSelf: { xs: "stretch", sm: "center" } }}
             >
-              <TextField
-                label="Search notes"
-                placeholder="Search UI can be added in a later step"
-                size="small"
-                fullWidth
-                disabled
-              />
-              <Button
-                variant="contained"
-                href="/notes/new"
-                sx={{ minWidth: 140 }}
-              >
-                New Note
-              </Button>
-            </Stack>
+              New Note
+            </Button>
           </Stack>
         </Box>
 
@@ -73,7 +66,7 @@ export default async function Notes() {
           <Table sx={{ minWidth: 760, tableLayout: "fixed" }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ width: 280 }}>Title</TableCell>
+                <TableCell sx={{ width: 240 }}>Title</TableCell>
                 <TableCell>Preview</TableCell>
                 <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
                   Created
@@ -81,7 +74,7 @@ export default async function Notes() {
                 <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
                   Updated
                 </TableCell>
-                <TableCell sx={{ width: 180, whiteSpace: "nowrap" }}>
+                <TableCell sx={{ width: 88, whiteSpace: "nowrap" }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -98,50 +91,12 @@ export default async function Notes() {
                 </TableRow>
               ) : (
                 notes.map((note) => (
-                  <TableRow key={note.id} hover>
-                    <TableCell>
-                      <Typography variant="subtitle2" noWrap title={note.title}>
-                        {note.title}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        noWrap
-                        title={note.content}
-                      >
-                        {note.content}
-                      </Typography>
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>
-                      {formatDateTime(note.createdAt)}
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>
-                      {formatDateTime(note.updatedAt)}
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>
-                      <Stack direction="row" spacing={1}>
-                        <Button
-                          component={Link}
-                          href={`/notes/${note.id}/edit`}
-                          variant="text"
-                        >
-                          Edit
-                        </Button>
-                        <Box
-                          component="form"
-                          action={deleteNote}
-                          sx={{ display: "inline-flex" }}
-                        >
-                          <input type="hidden" name="id" value={note.id} />
-                          <Button color="error" type="submit" variant="text">
-                            Delete
-                          </Button>
-                        </Box>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
+                  <NoteTableRow
+                    key={note.id}
+                    note={note}
+                    createdLabel={formatDateTime(note.createdAt)}
+                    updatedLabel={formatDateTime(note.updatedAt)}
+                  />
                 ))
               )}
             </TableBody>
