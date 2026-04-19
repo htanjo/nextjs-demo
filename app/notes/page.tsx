@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { connection } from "next/server";
+import { deleteNote } from "@/app/notes/actions";
 import { listNotes } from "@/lib/notes";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
@@ -145,12 +146,15 @@ export default async function Notes() {
                     <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
                       Updated
                     </TableCell>
+                    <TableCell sx={{ width: 120, whiteSpace: "nowrap" }}>
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {notes.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={4}>
+                      <TableCell colSpan={5}>
                         <Typography color="text.secondary">
                           No notes yet. Create your first note to populate this
                           list.
@@ -184,6 +188,18 @@ export default async function Notes() {
                         </TableCell>
                         <TableCell sx={{ whiteSpace: "nowrap" }}>
                           {formatDateTime(note.updatedAt)}
+                        </TableCell>
+                        <TableCell sx={{ whiteSpace: "nowrap" }}>
+                          <Box
+                            component="form"
+                            action={deleteNote}
+                            sx={{ display: "inline-flex" }}
+                          >
+                            <input type="hidden" name="id" value={note.id} />
+                            <Button color="error" type="submit" variant="text">
+                              Delete
+                            </Button>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     ))

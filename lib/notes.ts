@@ -58,3 +58,14 @@ export async function createNote(input: CreateNoteInput): Promise<Note> {
 
   return note;
 }
+
+export async function deleteNote(id: string): Promise<void> {
+  const db = getDb();
+
+  db.prepare(
+    `
+      DELETE FROM notes
+      WHERE id = ?
+    `,
+  ).run(id);
+}

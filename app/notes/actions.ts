@@ -3,7 +3,10 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { type CreateNoteFormState } from "@/app/notes/form-state";
-import { createNote as createNoteRecord } from "@/lib/notes";
+import {
+  createNote as createNoteRecord,
+  deleteNote as deleteNoteRecord,
+} from "@/lib/notes";
 import { createNoteSchema } from "@/lib/validations/note";
 
 export async function createNote(
@@ -28,5 +31,16 @@ export async function createNote(
   }
 
   await createNoteRecord(validatedFields.data);
+  redirect("/notes");
+}
+
+export async function deleteNote(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+
+  if (!id) {
+    return;
+  }
+
+  await deleteNoteRecord(id);
   redirect("/notes");
 }
