@@ -1,14 +1,13 @@
 import {
   Box,
   Breadcrumbs,
-  Button,
   Container,
   Link,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+import { NoteForm } from "./note-form";
 
 export default function NewNotePage() {
   return (
@@ -36,7 +35,8 @@ export default function NewNotePage() {
               Create Note
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-              まずは作成ページのUIだけを用意しています。次のステップで入力値の管理と保存処理を追加します。
+              First we are wiring validation into the form. Persistence and
+              redirects will be added in the next step.
             </Typography>
           </Box>
 
@@ -49,52 +49,7 @@ export default function NewNotePage() {
               p: { xs: 3, md: 4 },
             }}
           >
-            <Stack
-              component="form"
-              spacing={3}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                label="Title"
-                name="title"
-                placeholder="e.g. Notes app architecture memo"
-                fullWidth
-              />
-              <TextField
-                label="Content"
-                name="content"
-                placeholder="Write your note here..."
-                fullWidth
-                multiline
-                minRows={10}
-              />
-
-              <Stack
-                direction={{ xs: "column-reverse", sm: "row" }}
-                spacing={2}
-                sx={{
-                  justifyContent: "space-between",
-                  alignItems: { xs: "stretch", sm: "center" },
-                }}
-              >
-                <Button variant="text" component={Link} href="/notes">
-                  Cancel
-                </Button>
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={1.5}
-                  sx={{ alignItems: { xs: "stretch", sm: "center" } }}
-                >
-                  <Button variant="outlined" disabled>
-                    Save Draft
-                  </Button>
-                  <Button variant="contained" disabled>
-                    Create Note
-                  </Button>
-                </Stack>
-              </Stack>
-            </Stack>
+            <NoteForm />
           </Paper>
         </Stack>
       </Container>
