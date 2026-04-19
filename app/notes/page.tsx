@@ -43,7 +43,7 @@ export default function Notes() {
             sx={{
               border: "1px solid",
               borderColor: "divider",
-              borderRadius: 4,
+              borderRadius: 2,
               p: { xs: 3, md: 4 },
               backgroundColor: "rgba(255, 255, 255, 0.88)",
               backdropFilter: "blur(12px)",
@@ -95,7 +95,7 @@ export default function Notes() {
             sx={{
               border: "1px solid",
               borderColor: "divider",
-              borderRadius: 4,
+              borderRadius: 2,
               overflow: "hidden",
             }}
           >
@@ -125,30 +125,38 @@ export default function Notes() {
             </Stack>
 
             <TableContainer>
-              <Table sx={{ minWidth: 760 }}>
+              <Table sx={{ minWidth: 760, tableLayout: "fixed" }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ width: "34%" }}>Title</TableCell>
+                    <TableCell sx={{ width: 280 }}>Title</TableCell>
                     <TableCell>Preview</TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>Created</TableCell>
-                    <TableCell sx={{ whiteSpace: "nowrap" }}>Updated</TableCell>
+                    <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
+                      Created
+                    </TableCell>
+                    <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
+                      Updated
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {mockNotes.map((note) => (
                     <TableRow key={note.id} hover>
                       <TableCell>
-                        <Stack spacing={0.75}>
-                          <Typography variant="subtitle2">
-                            {note.title}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {note.id}
-                          </Typography>
-                        </Stack>
+                        <Typography
+                          variant="subtitle2"
+                          noWrap
+                          title={note.title}
+                        >
+                          {note.title}
+                        </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                          title={note.content}
+                        >
                           {note.content}
                         </Typography>
                       </TableCell>
