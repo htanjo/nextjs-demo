@@ -35,8 +35,8 @@ export default function NewNotePage() {
               Create Note
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-              First we are wiring validation into the form. Persistence and
-              redirects will be added in the next step.
+              Validation and SQLite persistence are now connected. Submit the
+              form to create a note and return to the list page.
             </Typography>
           </Box>
 

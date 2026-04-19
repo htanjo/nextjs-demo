@@ -15,7 +15,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { mockNotes } from "@/lib/mocks/notes";
+import { connection } from "next/server";
+import { listNotes } from "@/lib/notes";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
   dateStyle: "medium",
@@ -26,7 +27,10 @@ function formatDateTime(value: string) {
   return dateTimeFormatter.format(new Date(value));
 }
 
-export default function Notes() {
+export default async function Notes() {
+  await connection();
+  const notes = await listNotes();
+
   return (
     <Box
       sx={{
@@ -69,7 +73,8 @@ export default function Notes() {
                   color="text.secondary"
                   sx={{ mt: 1 }}
                 >
-                  モックデータを表示する一覧ページです。次のステップで作成・編集・削除を足していきます。
+                  Notes are now loaded from SQLite. Next we can add editing and
+                  deletion on top of the same data flow.
                 </Typography>
               </Box>
               <Stack
@@ -79,7 +84,7 @@ export default function Notes() {
                 sx={{ flexWrap: "wrap" }}
               >
                 <Chip
-                  label={`${mockNotes.length} notes`}
+                  label={`${notes.length} notes`}
                   color="primary"
                   variant="outlined"
                 />
@@ -114,12 +119,16 @@ export default function Notes() {
             >
               <TextField
                 label="Search notes"
-                placeholder="検索UIは次のステップで実装"
+                placeholder="Search UI can be added in a later step"
                 size="small"
                 fullWidth
                 disabled
               />
-              <Button variant="contained" href="/notes/new" sx={{ minWidth: 140 }}>
+              <Button
+                variant="contained"
+                href="/notes/new"
+                sx={{ minWidth: 140 }}
+              >
                 New Note
               </Button>
             </Stack>
@@ -139,35 +148,46 @@ export default function Notes() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {mockNotes.map((note) => (
-                    <TableRow key={note.id} hover>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          noWrap
-                          title={note.title}
-                        >
-                          {note.title}
+                  {notes.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4}>
+                        <Typography color="text.secondary">
+                          No notes yet. Create your first note to populate this
+                          list.
                         </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          noWrap
-                          title={note.content}
-                        >
-                          {note.content}
-                        </Typography>
-                      </TableCell>
-                      <TableCell sx={{ whiteSpace: "nowrap" }}>
-                        {formatDateTime(note.createdAt)}
-                      </TableCell>
-                      <TableCell sx={{ whiteSpace: "nowrap" }}>
-                        {formatDateTime(note.updatedAt)}
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    notes.map((note) => (
+                      <TableRow key={note.id} hover>
+                        <TableCell>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            title={note.title}
+                          >
+                            {note.title}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            noWrap
+                            title={note.content}
+                          >
+                            {note.content}
+                          </Typography>
+                        </TableCell>
+                        <TableCell sx={{ whiteSpace: "nowrap" }}>
+                          {formatDateTime(note.createdAt)}
+                        </TableCell>
+                        <TableCell sx={{ whiteSpace: "nowrap" }}>
+                          {formatDateTime(note.updatedAt)}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

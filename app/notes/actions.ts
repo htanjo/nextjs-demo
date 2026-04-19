@@ -1,7 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { type CreateNoteFormState } from "@/app/notes/form-state";
+import { createNote as createNoteRecord } from "@/lib/notes";
 import { createNoteSchema } from "@/lib/validations/note";
 
 export async function createNote(
@@ -25,10 +27,6 @@ export async function createNote(
     };
   }
 
-  console.log("Validated note payload:", validatedFields.data);
-
-  return {
-    message: "Validation passed. Persistence will be added in the next step.",
-    values: validatedFields.data,
-  };
+  await createNoteRecord(validatedFields.data);
+  redirect("/notes");
 }
