@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import {
   Alert,
+  Box,
   Button,
   Link,
   Stack,
@@ -37,72 +38,78 @@ export function NoteForm({
   const pendingLabel = mode === "create" ? "Creating..." : "Updating...";
 
   return (
-    <Stack
-      component="form"
-      action={formAction}
-      spacing={3}
-      noValidate
-      autoComplete="off"
-    >
+    <Box sx={{ position: "relative" }}>
       {noteId ? (
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{
+            position: "absolute",
+            top: -12,
+            right: 0,
+            maxWidth: "50%",
+            textAlign: "right",
+          }}
+        >
           Note ID: {noteId}
         </Typography>
       ) : null}
 
-      {message ? (
-        <Alert severity={errors ? "error" : "success"}>{message}</Alert>
-      ) : null}
-
-      {noteId ? <input type="hidden" name="id" value={noteId} /> : null}
-
-      <TextField
-        label="Title"
-        name="title"
-        placeholder="e.g. Notes app architecture memo"
-        defaultValue={values.title}
-        error={Boolean(errors?.title)}
-        helperText={errors?.title?.[0] ?? "Up to 30 characters"}
-        required
-        fullWidth
-      />
-      <TextField
-        label="Content"
-        name="content"
-        placeholder="Write your note here..."
-        defaultValue={values.content}
-        error={Boolean(errors?.content)}
-        helperText={errors?.content?.[0] ?? "Required. Up to 5000 characters"}
-        required
-        fullWidth
-        multiline
-        minRows={10}
-      />
-
       <Stack
-        direction={{ xs: "column-reverse", sm: "row" }}
-        spacing={2}
+        component="form"
+        action={formAction}
+        spacing={3}
+        noValidate
+        autoComplete="off"
         sx={{
-          justifyContent: "space-between",
-          alignItems: { xs: "stretch", sm: "center" },
+          position: "relative",
         }}
       >
-        <Button variant="text" component={Link} href="/notes">
-          Cancel
-        </Button>
+        {message ? (
+          <Alert severity={errors ? "error" : "success"}>{message}</Alert>
+        ) : null}
+
+        {noteId ? <input type="hidden" name="id" value={noteId} /> : null}
+
+        <TextField
+          label="Title"
+          name="title"
+          placeholder="e.g. Notes app architecture memo"
+          defaultValue={values.title}
+          error={Boolean(errors?.title)}
+          helperText={errors?.title?.[0] ?? "Up to 30 characters"}
+          required
+          fullWidth
+        />
+        <TextField
+          label="Content"
+          name="content"
+          placeholder="Write your note here..."
+          defaultValue={values.content}
+          error={Boolean(errors?.content)}
+          helperText={errors?.content?.[0] ?? "Required. Up to 5000 characters"}
+          required
+          fullWidth
+          multiline
+          minRows={10}
+        />
+
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={1.5}
-          sx={{ alignItems: { xs: "stretch", sm: "center" } }}
+          sx={{
+            justifyContent: "flex-end",
+            alignItems: { xs: "stretch", sm: "center" },
+          }}
         >
-          <Button variant="outlined" disabled>
-            Save Draft
+          <Button variant="outlined" component={Link} href="/notes">
+            Cancel
           </Button>
           <Button variant="contained" type="submit" disabled={pending}>
             {pending ? pendingLabel : submitLabel}
           </Button>
         </Stack>
       </Stack>
-    </Stack>
+    </Box>
   );
 }
