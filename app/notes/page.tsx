@@ -119,7 +119,7 @@ export default function Notes() {
                 fullWidth
                 disabled
               />
-              <Button variant="contained" disabled sx={{ minWidth: 140 }}>
+              <Button variant="contained" href="/notes/new" sx={{ minWidth: 140 }}>
                 New Note
               </Button>
             </Stack>
