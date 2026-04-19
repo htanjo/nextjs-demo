@@ -74,8 +74,8 @@ export default async function Notes() {
                   color="text.secondary"
                   sx={{ mt: 1 }}
                 >
-                  Notes are now loaded from SQLite. Next we can add editing and
-                  deletion on top of the same data flow.
+                  Notes are now loaded from SQLite. The edit screen is ready,
+                  and the update action can be added in the next step.
                 </Typography>
               </Box>
               <Stack
@@ -146,7 +146,7 @@ export default async function Notes() {
                     <TableCell sx={{ width: 160, whiteSpace: "nowrap" }}>
                       Updated
                     </TableCell>
-                    <TableCell sx={{ width: 120, whiteSpace: "nowrap" }}>
+                    <TableCell sx={{ width: 180, whiteSpace: "nowrap" }}>
                       Actions
                     </TableCell>
                   </TableRow>
@@ -190,16 +190,29 @@ export default async function Notes() {
                           {formatDateTime(note.updatedAt)}
                         </TableCell>
                         <TableCell sx={{ whiteSpace: "nowrap" }}>
-                          <Box
-                            component="form"
-                            action={deleteNote}
-                            sx={{ display: "inline-flex" }}
-                          >
-                            <input type="hidden" name="id" value={note.id} />
-                            <Button color="error" type="submit" variant="text">
-                              Delete
+                          <Stack direction="row" spacing={1}>
+                            <Button
+                              component={Link}
+                              href={`/notes/${note.id}/edit`}
+                              variant="text"
+                            >
+                              Edit
                             </Button>
-                          </Box>
+                            <Box
+                              component="form"
+                              action={deleteNote}
+                              sx={{ display: "inline-flex" }}
+                            >
+                              <input type="hidden" name="id" value={note.id} />
+                              <Button
+                                color="error"
+                                type="submit"
+                                variant="text"
+                              >
+                                Delete
+                              </Button>
+                            </Box>
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     ))

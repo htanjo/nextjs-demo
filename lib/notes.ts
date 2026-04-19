@@ -38,6 +38,21 @@ export async function listNotes(): Promise<Note[]> {
   return rows.map(mapRowToNote);
 }
 
+export async function getNoteById(id: string): Promise<Note | null> {
+  const db = getDb();
+  const row = db
+    .prepare(
+      `
+        SELECT id, title, content, created_at, updated_at
+        FROM notes
+        WHERE id = ?
+      `,
+    )
+    .get(id) as NoteRow | undefined;
+
+  return row ? mapRowToNote(row) : null;
+}
+
 export async function createNote(input: CreateNoteInput): Promise<Note> {
   const db = getDb();
   const now = new Date().toISOString();
