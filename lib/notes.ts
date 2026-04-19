@@ -74,6 +74,29 @@ export async function createNote(input: CreateNoteInput): Promise<Note> {
   return note;
 }
 
+export async function updateNote(
+  id: string,
+  input: CreateNoteInput,
+): Promise<void> {
+  const db = getDb();
+  const updatedAt = new Date().toISOString();
+
+  db.prepare(
+    `
+      UPDATE notes
+      SET title = @title,
+          content = @content,
+          updated_at = @updatedAt
+      WHERE id = @id
+    `,
+  ).run({
+    id,
+    title: input.title,
+    content: input.content,
+    updatedAt,
+  });
+}
+
 export async function deleteNote(id: string): Promise<void> {
   const db = getDb();
 

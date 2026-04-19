@@ -1,16 +1,17 @@
 import {
   Box,
   Breadcrumbs,
-  Button,
   Container,
   Link,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
+import { updateNote } from "@/app/notes/actions";
+import { NoteForm } from "@/app/notes/components/note-form";
+import { createInitialNoteFormState } from "@/app/notes/form-state";
 import { getNoteById } from "@/lib/notes";
 
 type EditNotePageProps = {
@@ -53,8 +54,8 @@ export default async function EditNotePage({ params }: EditNotePageProps) {
               Edit Note
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-              This step only loads the existing note into the edit screen. The
-              actual update action will be added next.
+              The form now reuses the same fields as the create screen and saves
+              changes back to SQLite.
             </Typography>
           </Box>
 
@@ -67,37 +68,15 @@ export default async function EditNotePage({ params }: EditNotePageProps) {
               p: { xs: 3, md: 4 },
             }}
           >
-            <Stack spacing={3}>
-              <TextField
-                label="Title"
-                defaultValue={note.title}
-                helperText={`Note ID: ${note.id}`}
-                fullWidth
-              />
-              <TextField
-                label="Content"
-                defaultValue={note.content}
-                fullWidth
-                multiline
-                minRows={10}
-              />
-
-              <Stack
-                direction={{ xs: "column-reverse", sm: "row" }}
-                spacing={2}
-                sx={{
-                  justifyContent: "space-between",
-                  alignItems: { xs: "stretch", sm: "center" },
-                }}
-              >
-                <Button variant="text" component={Link} href="/notes">
-                  Back to Notes
-                </Button>
-                <Button variant="contained" disabled>
-                  Update Note
-                </Button>
-              </Stack>
-            </Stack>
+            <NoteForm
+              mode="edit"
+              action={updateNote}
+              initialState={createInitialNoteFormState({
+                title: note.title,
+                content: note.content,
+              })}
+              noteId={note.id}
+            />
           </Paper>
         </Stack>
       </Container>

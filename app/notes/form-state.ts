@@ -1,19 +1,27 @@
-export type CreateNoteFormState = {
+export type NoteFormValues = {
+  title: string;
+  content: string;
+};
+
+export type NoteFormState = {
   errors?: {
     title?: string[];
     content?: string[];
   };
   message: string;
-  values: {
-    title: string;
-    content: string;
-  };
+  values: NoteFormValues;
 };
 
-export const initialCreateNoteFormState: CreateNoteFormState = {
-  message: "",
-  values: {
-    title: "",
-    content: "",
-  },
-};
+export function createInitialNoteFormState(
+  values: Partial<NoteFormValues> = {},
+): NoteFormState {
+  return {
+    message: "",
+    values: {
+      title: values.title ?? "",
+      content: values.content ?? "",
+    },
+  };
+}
+
+export const initialCreateNoteFormState = createInitialNoteFormState();

@@ -7,7 +7,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { NoteForm } from "./note-form";
+import { createNote } from "@/app/notes/actions";
+import { NoteForm } from "@/app/notes/components/note-form";
+import { initialCreateNoteFormState } from "@/app/notes/form-state";
 
 export default function NewNotePage() {
   return (
@@ -49,7 +51,11 @@ export default function NewNotePage() {
               p: { xs: 3, md: 4 },
             }}
           >
-            <NoteForm />
+            <NoteForm
+              mode="create"
+              action={createNote}
+              initialState={initialCreateNoteFormState}
+            />
           </Paper>
         </Stack>
       </Container>

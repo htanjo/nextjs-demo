@@ -1,16 +1,40 @@
 "use client";
 
 import { useActionState } from "react";
-import { Alert, Button, Link, Stack, TextField } from "@mui/material";
-import { createNote } from "@/app/notes/actions";
-import { initialCreateNoteFormState } from "@/app/notes/form-state";
+import {
+  Alert,
+  Button,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import type { NoteFormState } from "@/app/notes/form-state";
 
-export function NoteForm() {
-  const [state, formAction, pending] = useActionState(
-    createNote,
-    initialCreateNoteFormState,
-  );
+type NoteFormAction = (
+  state: NoteFormState,
+  formData: FormData,
+) => Promise<NoteFormState>;
+
+type NoteFormMode = "create" | "edit";
+
+type NoteFormProps = {
+  mode: NoteFormMode;
+  action: NoteFormAction;
+  initialState: NoteFormState;
+  noteId?: string;
+};
+
+export function NoteForm({
+  mode,
+  action,
+  initialState,
+  noteId,
+}: NoteFormProps) {
+  const [state, formAction, pending] = useActionState(action, initialState);
   const { values, errors, message } = state;
+  const submitLabel = mode === "create" ? "Create Note" : "Update Note";
+  const pendingLabel = mode === "create" ? "Creating..." : "Updating...";
 
   return (
     <Stack
@@ -20,9 +44,17 @@ export function NoteForm() {
       noValidate
       autoComplete="off"
     >
+      {noteId ? (
+        <Typography variant="caption" color="text.secondary">
+          Note ID: {noteId}
+        </Typography>
+      ) : null}
+
       {message ? (
         <Alert severity={errors ? "error" : "success"}>{message}</Alert>
       ) : null}
+
+      {noteId ? <input type="hidden" name="id" value={noteId} /> : null}
 
       <TextField
         label="Title"
@@ -67,7 +99,7 @@ export function NoteForm() {
             Save Draft
           </Button>
           <Button variant="contained" type="submit" disabled={pending}>
-            {pending ? "Validating..." : "Create Note"}
+            {pending ? pendingLabel : submitLabel}
           </Button>
         </Stack>
       </Stack>
